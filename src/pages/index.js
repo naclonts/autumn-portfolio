@@ -1,4 +1,4 @@
-import * as React from "react"
+import React, { useState } from 'react';
 import { Link } from "gatsby"
 import { StaticImage } from "gatsby-plugin-image"
 
@@ -69,54 +69,90 @@ const moreLinks = [
 
 const utmParameters = `?utm_source=starter&utm_medium=start-page&utm_campaign=default-starter`
 
-const IndexPage = () => (
-  <Layout>
-    <div className={styles.textCenter}>
-      <StaticImage
-        src="../images/example.png"
-        loading="eager"
-        width={64}
-        quality={95}
-        formats={["auto", "webp", "avif"]}
-        alt=""
-        style={{ marginBottom: `var(--space-3)` }}
-      />
-      <h1>
-        Welcome to <b>Gatsby!</b>
-      </h1>
-      <p className={styles.intro}>
-        <b>Example pages:</b>{" "}
-        {samplePageLinks.map((link, i) => (
-          <React.Fragment key={link.url}>
-            <Link to={link.url}>{link.text}</Link>
-            {i !== samplePageLinks.length - 1 && <> · </>}
-          </React.Fragment>
-        ))}
-        <br />
-        Edit <code>src/pages/index.js</code> to update this page.
-      </p>
-    </div>
-    <ul className={styles.list}>
-      {links.map(link => (
-        <li key={link.url} className={styles.listItem}>
-          <a
-            className={styles.listItemLink}
-            href={`${link.url}${utmParameters}`}
-          >
-            {link.text} ↗
-          </a>
-          <p className={styles.listItemDescription}>{link.description}</p>
-        </li>
-      ))}
-    </ul>
-    {moreLinks.map((link, i) => (
-      <React.Fragment key={link.url}>
-        <a href={`${link.url}${utmParameters}`}>{link.text}</a>
-        {i !== moreLinks.length - 1 && <> · </>}
-      </React.Fragment>
-    ))}
-  </Layout>
-)
+const IndexPage = () => {
+  const [currentImage, setCurrentImage] = useState(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isCarouselVisible, setIsCarouselVisible] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const images = [
+    'images/img1.jpg',
+    'images/img2.jpg',
+    'images/img3.jpg',
+    // Add more images as needed
+  ];
+
+  const openCarousel = (index) => {
+    setCurrentIndex(index);
+    setCurrentImage(images[index]);
+    setIsCarouselVisible(true);
+  };
+
+  const closeCarousel = () => {
+    setIsCarouselVisible(false);
+  };
+
+  const prevImage = () => {
+    const newIndex = currentIndex === 0 ? images.length - 1 : currentIndex - 1;
+    setCurrentIndex(newIndex);
+    setCurrentImage(images[newIndex]);
+  };
+
+  const nextImage = () => {
+    const newIndex = currentIndex === images.length - 1 ? 0 : currentIndex + 1;
+    setCurrentIndex(newIndex);
+    setCurrentImage(images[newIndex]);
+  };
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
+  return (
+    <Layout>
+      <header>
+        <nav>
+          <div className="logo">Autumn Erb</div>
+          <div className={`menu ${isMenuOpen ? 'active' : ''}`}>
+            <a href="#">Home</a>
+            <a href="#">Paintings</a>
+            <a href="#">Process</a>
+            <a href="#">About</a>
+            <a href="#">Exhibitions</a>
+            <a href="#">Contact</a>
+          </div>
+          <div className="hamburger" onClick={toggleMenu}>
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
+        </nav>
+      </header>
+
+      <main>
+        <div className="gallery">
+          {images.map((image, index) => (
+            <img
+              src={image}
+              alt={`Thumbnail ${index + 1}`}
+              className="thumbnail"
+              onClick={() => openCarousel(index)}
+              key={index}
+            />
+          ))}
+        </div>
+      </main>
+
+      {isCarouselVisible && (
+        <div className="carousel" onClick={closeCarousel}>
+          <span className="prev" onClick={(e) => { e.stopPropagation(); prevImage(); }}>&lt;</span>
+          <img src={currentImage} alt="Selected" className="carousel-image" />
+          <span className="next" onClick={(e) => { e.stopPropagation(); nextImage(); }}>&gt;</span>
+        </div>
+      )}
+    </Layout>
+  );
+};
 
 /**
  * Head export to define metadata for the page
