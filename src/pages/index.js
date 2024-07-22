@@ -1,53 +1,33 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { graphql } from "gatsby";
 import { GatsbyImage, getImage } from 'gatsby-plugin-image';
 import Layout from '../components/layout';
 import Seo from '../components/seo';
-import Carousel from 'react-multi-carousel';
-import 'react-multi-carousel/lib/styles.css';
-
-const responsive = {
-  superLargeDesktop: {
-    breakpoint: { max: 4000, min: 1024 },
-    items: 1
-  },
-  desktop: {
-    breakpoint: { max: 1024, min: 768 },
-    items: 1
-  },
-  tablet: {
-    breakpoint: { max: 768, min: 464 },
-    items: 1
-  },
-  mobile: {
-    breakpoint: { max: 464, min: 0 },
-    items: 1
-  }
-};
+import * as styles from '../components/index.module.css';
 
 const IndexPage = ({ data }) => {
   const images = data.allFile.nodes.filter(node => node.childImageSharp);
-  const [carouselRef, setCarouselRef] = useState(null);
+  const carouselRef = useRef(null);
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isCarouselVisible, setIsCarouselVisible] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const openCarousel = (index) => {
-    console.log("Opening carousel at index:", index);
     setCurrentImageIndex(index);
     setIsCarouselVisible(true);
   };
 
-  useEffect(() => {
-    setTimeout(() => {
-      carouselRef?.goToSlide(currentImageIndex + 2);
-    }, 0);
-  }, [carouselRef, currentImageIndex]);
-
   const closeCarousel = () => {
-    console.log("Closing carousel");
     setIsCarouselVisible(false);
+  };
+
+  const nextImage = () => {
+    setCurrentImageIndex((currentImageIndex + 1) % images.length);
+  };
+
+  const prevImage = () => {
+    setCurrentImageIndex((currentImageIndex - 1 + images.length) % images.length);
   };
 
   const toggleMenu = () => {
@@ -92,32 +72,17 @@ const IndexPage = ({ data }) => {
       {isCarouselVisible && (
         <div className="carousel-wrapper">
           <button className="close-carousel" onClick={closeCarousel}>X</button>
-          <Carousel
-            ref={(el) => setCarouselRef(el)}
-            slidesToSlide={currentImageIndex}
-            responsive={responsive}
-            infinite={true}
-            showDots={false}
-            autoPlay={false}
-            keyBoardControl={true}
-            customTransition="all .5"
-            transitionDuration={500}
-            containerClass="carousel-container"
-            itemClass="carousel-item"
-          >
-            {images.map((image, index) => {
-              const img = getImage(image.childImageSharp.gatsbyImageData);
-              return (
-                <div key={index} className="carousel-image-wrapper">
-                  <GatsbyImage
-                    image={img}
-                    alt={`Carousel Image ${index + 1}`}
-                    className="carousel-image"
-                  />
-                </div>
-              );
-            })}
-          </Carousel>
+          <button className="prev" onClick={prevImage}>&lt;</button>
+          <div className="carousel-image-wrapper">
+            <div className="carousel-image">
+              <GatsbyImage
+                image={getImage(images[currentImageIndex].childImageSharp.gatsbyImageData)}
+                alt={`Carousel Image ${currentImageIndex + 1}`}
+                objectFit='contain'
+              />
+            </div>
+          </div>
+          <button className="next" onClick={nextImage}>&gt;</button>
         </div>
       )}
     </Layout>
