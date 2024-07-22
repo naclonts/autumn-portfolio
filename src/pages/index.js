@@ -3,11 +3,9 @@ import { graphql } from "gatsby";
 import { GatsbyImage, getImage } from 'gatsby-plugin-image';
 import Layout from '../components/layout';
 import Seo from '../components/seo';
-import * as styles from '../components/index.module.css';
 
 const IndexPage = ({ data }) => {
   const images = data.allFile.nodes.filter(node => node.childImageSharp);
-  const carouselRef = useRef(null);
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isCarouselVisible, setIsCarouselVisible] = useState(false);
@@ -89,8 +87,14 @@ const IndexPage = ({ data }) => {
   );
 };
 
-export const Head = () => <Seo title="Home" />
-
+export const Head = () => (
+  <>
+    <Seo title="Home" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Bona+Nova+SC:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet"></link>
+  </>
+)
 export const query = graphql`
   query {
     allFile(filter: { sourceInstanceName: { eq: "images" } }) {
