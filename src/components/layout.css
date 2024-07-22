@@ -29,7 +29,6 @@ nav {
 
 .logo {
   font-size: 1.5em;
-  font-weight: bold;
 }
 
 .menu a {
@@ -100,26 +99,39 @@ nav {
   z-index: 1000;
 }
 
+.close-carousel, .prev, .next {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 1em;
+}
+
+.close-carousel svg, .prev svg, .next svg {
+  fill: none;
+  stroke: #bbb;
+  stroke-width: 1;
+}
+.close-carousel svg {
+  width: 24px;
+  height: 24px;
+}
+.prev svg, .next svg {
+  width: 48px;
+  height: 48px;
+}
+
 .close-carousel {
   position: absolute;
   top: 20px;
   right: 20px;
-  background: none;
-  border: none;
-  font-size: 2em;
-  color: #ddd;
-  cursor: pointer;
+  z-index: 100;
 }
 
 .prev, .next {
   position: absolute;
   top: 50%;
-  background: none;
-  border: none;
-  font-size: 2em;
-  color: #ddd;
-  cursor: pointer;
   transform: translateY(-50%);
+  z-index: 100;
 }
 
 .prev {
@@ -131,8 +143,8 @@ nav {
 }
 
 .carousel-image-wrapper {
-  max-width: 90%;
-  max-height: 80vh;
+  max-width: 80%;
+  max-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;

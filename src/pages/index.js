@@ -58,7 +58,7 @@ const IndexPage = ({ data }) => {
               <div key={index} className="thumbnail-wrapper" onClick={() => openCarousel(index)}>
                 <GatsbyImage
                   image={img}
-                  alt={`Thumbnail ${index + 1}`}
+                  alt={images[currentImageIndex].name}
                   className="thumbnail"
                 />
               </div>
@@ -69,18 +69,30 @@ const IndexPage = ({ data }) => {
 
       {isCarouselVisible && (
         <div className="carousel-wrapper">
-          <button className="close-carousel" onClick={closeCarousel}>X</button>
-          <button className="prev" onClick={prevImage}>&lt;</button>
+          <button className="close-carousel" onClick={closeCarousel}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+              <path fill="none" d="M3 3L21 21M3 21L21 3"/>
+            </svg>
+          </button>
+          <button className="prev" onClick={prevImage}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+              <path fill="none" d="M15 18L9 12L15 6"/>
+            </svg>
+          </button>
           <div className="carousel-image-wrapper">
             <div className="carousel-image">
               <GatsbyImage
                 image={getImage(images[currentImageIndex].childImageSharp.gatsbyImageData)}
-                alt={`Carousel Image ${currentImageIndex + 1}`}
+                alt={images[currentImageIndex].name}
                 objectFit='contain'
               />
             </div>
           </div>
-          <button className="next" onClick={nextImage}>&gt;</button>
+          <button className="next" onClick={nextImage}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+              <path fill="none" d="M9 18L15 12L9 6"/>
+            </svg>
+          </button>
         </div>
       )}
     </Layout>
@@ -95,6 +107,7 @@ export const Head = () => (
     <link href="https://fonts.googleapis.com/css2?family=Bona+Nova+SC:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet"></link>
   </>
 )
+
 export const query = graphql`
   query {
     allFile(filter: { sourceInstanceName: { eq: "images" } }) {
