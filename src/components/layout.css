@@ -1,6 +1,6 @@
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
+  font-family: 'Bona Nova SC', serif;
   background-color: #222;
   color: #ddd;
   padding: 0 1em;
@@ -28,10 +28,8 @@ nav {
 }
 
 .logo {
-  font-family: "Bona Nova SC", serif;
-  font-weight: 400;
-  font-style: normal;
   font-size: 1.5em;
+  font-weight: bold;
 }
 
 .menu a {
@@ -58,7 +56,9 @@ nav {
   display: flex;
   justify-content: center;
   padding: 5em 0;
-  border: 1em solid grey;
+  border: 1em solid grey; /* Add grey border */
+  margin: 5em 0 2em 0; /* Add margin to separate from other elements */
+  box-sizing: border-box; /* Ensure padding and border are included in the element's total width and height */
 }
 
 .gallery {
