@@ -84,7 +84,6 @@ const IndexPage = ({ data }) => {
               <GatsbyImage
                 image={getImage(images[currentImageIndex].childImageSharp.gatsbyImageData)}
                 alt={images[currentImageIndex].name}
-                objectFit='contain'
               />
             </div>
           </div>
@@ -110,10 +109,16 @@ export const Head = () => (
 
 export const query = graphql`
   query {
-    allFile(filter: { sourceInstanceName: { eq: "images" } }) {
+    allFile(filter: { extension: { regex: "/(jpg|jpeg|png|gif)/" } }) {
       nodes {
         childImageSharp {
-          gatsbyImageData(layout: CONSTRAINED)
+          gatsbyImageData(
+            layout: CONSTRAINED,
+            quality: 90,
+            formats: [WEBP],
+            placeholder: BLURRED,
+            transformOptions: { fit: CONTAIN }
+          )
         }
       }
     }
